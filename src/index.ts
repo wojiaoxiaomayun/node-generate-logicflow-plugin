@@ -1,44 +1,25 @@
-import LogicFlow from '@logicflow/core'
-import '@logicflow/core/dist/style/index.css';
+import LogicFlow from "@logicflow/core";
 
-const data = {
-    // 节点
-    nodes: [
-        {
-        id: 50,
-        type: 'rect',
-        x: 100,
-        y: 150,
-        text: '你好',
-        },
-        {
-        id: 21,
-        type: 'circle',
-        x: 300,
-        y: 150,
-        },
-    ],
-    // 边
-    edges:[
-        {
-        type: 'polyline',
-        sourceNodeId: 50,
-        targetNodeId: 21,
+import {RegisterParam} from '@logicflow/core/types/type'
+import {getViewModel,getView} from './util'
+
+
+interface lfgen extends LogicFlow{
+    genNode(registerParam:RegisterParam,html:string):any;
+}
+const gen = {
+    install(lf:LogicFlow){
+        (lf as lfgen).genNode = (registerParam:RegisterParam,html:string) => {
+            return {
+                view:getView(registerParam,html),
+                model:getViewModel(registerParam)
+            };
         }
-    ]
+    }
 }
 
-const lf = new LogicFlow({
-    container: document.querySelector('#app'),
-    tool: {
-        control: false,
-    },
-    stopScrollGraph: true,
-    stopZoomGraph: true,
-    grid: {
-        type: 'dot',
-        size: 20,
-    },
-});
-
-lf.render(data);
+export default gen;
+export {
+    gen
+}
+export type {lfgen}
