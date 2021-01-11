@@ -1,0 +1,31 @@
+{
+  "name": "node-gen-logicflow-plugin",
+  "version": "1.0.0",
+  "description": "logic flow 生成自定义节点",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "dev": "webpack-dev-server"
+  },
+  "keywords": [
+    "logic",
+    "flow"
+  ],
+  "author": "xuhaoliang",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.1",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.14",
+    "typescript": "^4.1.3",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
+  },
+  "dependencies": {
+    "@logicflow/core": "^0.1.0"
+  }
+}
