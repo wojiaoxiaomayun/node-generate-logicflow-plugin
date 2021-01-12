@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": false,
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": false,
+    "allowSyntheticDefaultImports":true,
+    "experimentalDecorators":true,
+    "isolatedModules":true,
+    "maxNodeModuleJsDepth":10,
+    "skipLibCheck":true,
+    "skipDefaultLibCheck":true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noEmitOnError":true
+  },
+  "include":[
+	"src/**/*"
+  ],
+  "exclude":[
+	"node_modules"
+  ]
+}
