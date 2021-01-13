@@ -1,19 +1,22 @@
-import LogicFlow from "@logicflow/core";
-
-import {RegisterParam} from '@logicflow/core/types/type'
-import {getViewModel,getView} from './util'
+import {LogicFlow,RegisterParam,RegisterBack} from "@logicflow/core";
+import {getViewModel,getView,GenParam} from './util'
 
 
 interface lfgen extends LogicFlow{
-    genNode(registerParam:RegisterParam,html:string):any;
+    registerGenNode
 }
 const gen = {
     install(lf:LogicFlow){
-        (lf as lfgen).genNode = (registerParam:RegisterParam,html:string) => {
+        var genNode = (registerParam:RegisterParam,genParam:GenParam) => {
             return {
-                view:getView(registerParam,html),
-                model:getViewModel(registerParam)
+                view:getView(registerParam,genParam),
+                model:getViewModel(registerParam,genParam)
             };
+        }
+        (lf as lfgen).registerGenNode = (genParam:GenParam) => {
+            lf.register(genParam.nodeName,(params:RegisterParam) => {
+                return genNode(params,genParam)
+            });
         }
     }
 }
