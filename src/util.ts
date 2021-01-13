@@ -1,6 +1,7 @@
 import { RegisterParam,GraphModel,Point } from '@logicflow/core';
 import {html2json} from 'html2json';
 import { computed, observable } from 'mobx';
+import artTemplate from 'art-template'
 export type GenParam = {
     nodeName:string,
     html:string,
@@ -27,6 +28,7 @@ export const getViewModel = ({BaseNodeModel,RectNodeModel}:RegisterParam,{modeTy
 export const getView = ({RectNode,h}:RegisterParam,{html}:GenParam) => {
     class GNode extends RectNode{
         parseHtml(){
+            console.log(artTemplate.compile(html,{text:'bb'}))
             let info = html2json(html);
             return this.getH(info);
         }
@@ -34,7 +36,11 @@ export const getView = ({RectNode,h}:RegisterParam,{html}:GenParam) => {
             var arr = [];
             if(info.child){
                 info.child.forEach(e => {
-                    arr.push(this.getH(e));
+                    if(e.node == 'element'){
+                        arr.push(this.getH(e));
+                    }else if(e.node == 'text'){
+                        arr.push(e.text)
+                    }
                 });
             }
             return arr;

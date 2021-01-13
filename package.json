@@ -15,7 +15,7 @@
   "author": "xuhaoliang",
   "license": "ISC",
   "devDependencies": {
-	"@babel/core": "^7.4.5",
+    "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
@@ -27,11 +27,12 @@
     "webpack": "^4.17.1",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2",
-	"@babel/polyfill": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
     "core-js": "2"
   },
   "dependencies": {
     "@logicflow/core": "^0.1.0",
+    "art-template": "^4.13.2",
     "html2json": "^1.0.2"
   }
 }
