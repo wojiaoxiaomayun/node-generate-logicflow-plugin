@@ -6,26 +6,35 @@ export type GenParam = {
     nodeType:string,
     svg?:string,
     html?:string,
-    width?:number,
-    height?:number,
-    rules?:ConnectRule[]
+    attributes?:Function,
+    targetRules?:ConnectRule[],
+    sourceRules?:ConnectRule[]
 }
-export const getViewModel = ({BaseNodeModel,RectNodeModel}:RegisterParam,{width,height,rules}:GenParam) => {
+export const getViewModel = ({BaseNodeModel,RectNodeModel}:RegisterParam,{sourceRules,targetRules}:GenParam) => {
     class GNodeModel extends RectNodeModel{
-        width = width ?? 200;
-        height = height ?? 100;
         getConnectedSourceRules(): ConnectRule[]{
             let brules = super.getConnectedSourceRules();
-            if(rules && rules instanceof Array){
-                brules = brules.concat(rules)
+            if(sourceRules && sourceRules instanceof Array){
+                brules = brules.concat(sourceRules)
             }
-            return rules;
+            return brules;
+        }
+        getConnectedTargetRules(): ConnectRule[]{
+            let brules = super.getConnectedTargetRules();
+            if(targetRules && targetRules instanceof Array){
+                brules = brules.concat(targetRules)
+            }
+            return brules;
         }
     }
     return GNodeModel;
 }
-export const getView = ({RectNode,h}:RegisterParam,{svg,html}:GenParam) => {
+export const getView = ({RectNode,h}:RegisterParam,{svg,html,attributes}:GenParam) => {
     class GNode extends RectNode{
+        getAttributes() {
+            let oldattributes = super.getAttributes();
+            return attributes && attributes.call(this,oldattributes) || oldattributes;
+        }
         parseHtml(){
             var temp = svg || html;
             if(!svg && html){
@@ -35,7 +44,8 @@ export const getView = ({RectNode,h}:RegisterParam,{svg,html}:GenParam) => {
                     </body>
                 </foreignObject>`
             }
-            temp = artTemplate.render(temp,this.getProperties(),{
+            let {properties} = this.getAttributes();
+            temp = artTemplate.render(temp,properties,{
                 escape:false
             });
             let info = html2json(temp);
@@ -65,7 +75,6 @@ export const getView = ({RectNode,h}:RegisterParam,{svg,html}:GenParam) => {
                     const {
                         x,y,width,height
                     } = this.getAttributes();
-                    console.log(width)
                     attr.x = x - width/ 2;
                     attr.y = y - height / 2;
                     attr.width = width; 

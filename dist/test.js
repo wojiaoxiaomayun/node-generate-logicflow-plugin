@@ -1,8 +1,7 @@
-import LogicFlow, { RegisterParam } from '@logicflow/core'
+import LogicFlow from '@logicflow/core';
 import '@logicflow/core/dist/style/index.css';
-import {gen,lfgen} from './index'
-
-const data = {
+import { gen } from './index';
+var data = {
     // 节点
     nodes: [
         {
@@ -10,8 +9,8 @@ const data = {
             type: 'add',
             x: 100,
             y: 150,
-            properties:{
-                text:'aa'
+            properties: {
+                text: 'aa'
             }
         },
         {
@@ -19,8 +18,8 @@ const data = {
             type: 'add',
             x: 200,
             y: 150,
-            properties:{
-                text:'cc'
+            properties: {
+                text: 'cc'
             }
         },
         {
@@ -31,16 +30,16 @@ const data = {
         },
     ],
     // 边
-    edges:[
+    edges: [
         {
             type: 'polyline',
             sourceNodeId: 50,
             targetNodeId: 21,
         }
     ]
-}
+};
 LogicFlow.use(gen);
-const lf = new LogicFlow({
+var lf = new LogicFlow({
     container: document.querySelector('#app'),
     tool: {
         control: false,
@@ -52,14 +51,18 @@ const lf = new LogicFlow({
         size: 20,
     },
 });
-(lf as lfgen).registerGenNode({
-    nodeType:'add',
+lf.registerGenNode({
+    nodeType: 'add',
     // svg:'<text>{{text}}</text>',
-    html:'<button style="width:100%;height:100%;">{{text}}</button>',
-    attributes:function(e){
+    html: '<button style="width:100%;height:100%;">{{text}}</button>',
+    attributes: function (e) {
         e.width = 100;
         e.height = 50;
         return e;
     }
-})
+});
 lf.render(data);
+lf.on('node:click', function (_a) {
+    var data = _a.data, e = _a.e;
+    console.log(data);
+});

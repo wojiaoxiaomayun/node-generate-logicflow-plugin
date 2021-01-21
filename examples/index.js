@@ -1,7 +1,6 @@
-import LogicFlow, { RegisterParam } from '@logicflow/core'
+import LogicFlow from '@logicflow/core'
 import '@logicflow/core/dist/style/index.css';
-import {gen,lfgen} from './index'
-
+import gen from 'node-gen-logicflow-plugin'
 const data = {
     // 节点
     nodes: [
@@ -52,7 +51,7 @@ const lf = new LogicFlow({
         size: 20,
     },
 });
-(lf as lfgen).registerGenNode({
+lf.registerGenNode({
     nodeType:'add',
     // svg:'<text>{{text}}</text>',
     html:'<button style="width:100%;height:100%;">{{text}}</button>',
