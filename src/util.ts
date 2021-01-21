@@ -1,43 +1,52 @@
-import { RegisterParam,GraphModel,Point } from '@logicflow/core';
-import {html2json} from 'html2json';
+import { RegisterParam,ConnectRule} from '@logicflow/core';
+import {html2json} from '../lib/html2json.js';
 import { computed, observable } from 'mobx';
-import artTemplate from 'art-template'
+import artTemplate from '../lib/template-web.js'
 export type GenParam = {
-    nodeName:string,
-    html:string,
-    modeType?:string,
+    nodeType:string,
+    svg?:string,
+    html?:string,
     width?:number,
-    height?:number
+    height?:number,
+    rules?:ConnectRule[]
 }
-export const getViewModel = ({BaseNodeModel,RectNodeModel}:RegisterParam,{modeType,width,height}:GenParam) => {
-    // class GNodeModel extends BaseNodeModel{
-    //     modelType = (modeType || 'GEN_NODE') as any;
-    //     @observable width = width || 100;
-    //     @observable height = height || 100;
-
-    //     constructor(data, graphModel: GraphModel) {
-    //         super(data);
-    //     }
-    // }
+export const getViewModel = ({BaseNodeModel,RectNodeModel}:RegisterParam,{width,height,rules}:GenParam) => {
     class GNodeModel extends RectNodeModel{
-        @observable width = width || 100;
-        @observable height = height || 100;
+        width = width ?? 200;
+        height = height ?? 100;
+        getConnectedSourceRules(): ConnectRule[]{
+            let brules = super.getConnectedSourceRules();
+            if(rules && rules instanceof Array){
+                brules = brules.concat(rules)
+            }
+            return rules;
+        }
     }
     return GNodeModel;
 }
-export const getView = ({RectNode,h}:RegisterParam,{html}:GenParam) => {
+export const getView = ({RectNode,h}:RegisterParam,{svg,html}:GenParam) => {
     class GNode extends RectNode{
         parseHtml(){
-            console.log(artTemplate.compile(html,{text:'bb'}))
-            let info = html2json(html);
+            var temp = svg || html;
+            if(!svg && html){
+                temp = `<foreignObject>
+                    <body xmlns="http://www.w3.org/1999/xhtml">
+                        ${temp}
+                    </body>
+                </foreignObject>`
+            }
+            temp = artTemplate.render(temp,this.getProperties(),{
+                escape:false
+            });
+            let info = html2json(temp);
             return this.getH(info);
         }
-        getChild(info){
+        getChild(info,isFirst = false){
             var arr = [];
             if(info.child){
                 info.child.forEach(e => {
                     if(e.node == 'element'){
-                        arr.push(this.getH(e));
+                        arr.push(this.getH(e,isFirst));
                     }else if(e.node == 'text'){
                         arr.push(e.text)
                     }
@@ -45,13 +54,18 @@ export const getView = ({RectNode,h}:RegisterParam,{html}:GenParam) => {
             }
             return arr;
         }
-        getH(info){
+        getH(info,isFirst = false){
+            if(info.node == 'root'){
+                return h('g',{},this.getChild(info,true));
+            }
             if(info.tag){
                 var attr = (info.attr || {});
-                if(info.tag === 'svg'){
+                if(isFirst){
+                    var attr = (info.attr || {});
                     const {
                         x,y,width,height
                     } = this.getAttributes();
+                    console.log(width)
                     attr.x = x - width/ 2;
                     attr.y = y - height / 2;
                     attr.width = width; 
@@ -63,12 +77,10 @@ export const getView = ({RectNode,h}:RegisterParam,{html}:GenParam) => {
                     }
                 });
                 return h(info.tag,attr, this.getChild(info))
-            }else{
-                return this.getChild(info)[0]
             }
         }
         getShape(){
-            return h('g',{},this.parseHtml());
+            return this.parseHtml();
         }
     }
     return GNode;

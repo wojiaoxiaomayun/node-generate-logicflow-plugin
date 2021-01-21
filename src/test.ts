@@ -10,7 +10,18 @@ const data = {
             type: 'add',
             x: 100,
             y: 150,
-            text: '你好',
+            properties:{
+                text:'aa'
+            }
+        },
+        {
+            id: 51,
+            type: 'add',
+            x: 200,
+            y: 150,
+            properties:{
+                text:'cc'
+            }
         },
         {
             id: 21,
@@ -42,7 +53,23 @@ const lf = new LogicFlow({
     },
 });
 (lf as lfgen).registerGenNode({
-    nodeName:'add',
-    html:'<text text-anchor="middle" dominant-baseline="middle" x="100" y="160" fill="currentColor" class="lf-element-text" color="#000000" font-size="12" font-weight="normal" font-family="" value="你好">{{text}}</text>'
+    nodeType:'add',
+    // svg:'<text>{{text}}</text>',
+    html:'<button style="width:100%;height:100%;">{{text}}</button>',
+    width:200,
+    height:50,
+    rules:[{
+        message: '流程节点下一个节点只能是网关节点',
+        validate: (source, target) => {
+            let isValid = true;
+            if (target.type !== 'rect') {
+                isValid = false;
+            }
+            return isValid;
+        }
+    }]
 })
 lf.render(data);
+lf.on('node:click', ({ data, e }) => {
+    console.log(data)
+})

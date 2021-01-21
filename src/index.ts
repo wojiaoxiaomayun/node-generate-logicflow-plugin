@@ -14,7 +14,7 @@ const gen = {
             };
         }
         (lf as lfgen).registerGenNode = (genParam:GenParam) => {
-            lf.register(genParam.nodeName,(params:RegisterParam) => {
+            lf.register(genParam.nodeType,(params:RegisterParam) => {
                 return genNode(params,genParam)
             });
         }

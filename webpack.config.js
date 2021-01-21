@@ -12,15 +12,15 @@ module.exports = {
         use: ["babel-loader", "ts-loader"],
         exclude: /node_modules/,
       },
-	  {  
-		test: /\.css$/,  
-		use: ['style-loader', 'css-loader']  
-	  },
-	  {  
+      {  
+      test: /\.css$/,  
+      use: ['style-loader', 'css-loader']  
+      },
+      {  
         test: /\.less$/,  
         use: ['style-loader', 'css-loader']  
   	  }
-    ],
+    ]
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
