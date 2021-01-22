@@ -11,7 +11,7 @@
     "maxNodeModuleJsDepth":10,
     "skipLibCheck":true,
     "skipDefaultLibCheck":true,
-    "module": "es2020",
+    "module": "es2015",
     "moduleResolution": "node",
     "noEmitOnError":true
   },

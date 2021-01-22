@@ -62,7 +62,3 @@ lf.registerGenNode({
     }
 });
 lf.render(data);
-lf.on('node:click', function (_a) {
-    var data = _a.data, e = _a.e;
-    console.log(data);
-});
